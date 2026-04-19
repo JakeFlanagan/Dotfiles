@@ -9,7 +9,7 @@
 set -euo pipefail
 
 REPO_URL="https://github.com/JakeFlanagan/Dotfiles.git"
-REPO_DIR="$HOME/dotfiles"
+REPO_DIR="$HOME/.dotfiles"
 
 # ── Colours ──────────────────────────────────────────────────────────────────
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'
