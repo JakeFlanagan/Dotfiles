@@ -6,6 +6,11 @@ update() {
   local CYAN='\033[0;36m'   BOLD='\033[1m'        GREY='\033[0;90m'
   local RESET='\033[0m'
 
+  # ── Privilege prefix ─────────────────────────────────────────────────────
+  # Empty when already root (LXC containers), 'sudo' otherwise.
+  local -a SUDO=()
+  [[ $EUID -ne 0 ]] && SUDO=(sudo)
+
   # ── Header ───────────────────────────────────────────────────────────────
   echo ""
   echo -e "${BOLD}╔══════════════════════════════════╗${RESET}"
@@ -31,10 +36,10 @@ update() {
   fi
 
   case "$OS_ID" in
-    ubuntu|debian|linuxmint|pop|kali) PKG_MANAGER="apt"    ;;
-    fedora|rhel|centos|rocky|almalinux) PKG_MANAGER="dnf"  ;;
+    ubuntu|debian|linuxmint|pop|kali) PKG_MANAGER="apt"     ;;
+    fedora|rhel|centos|rocky|almalinux) PKG_MANAGER="dnf"   ;;
     arch|manjaro|endeavouros)           PKG_MANAGER="pacman" ;;
-    alpine)                             PKG_MANAGER="apk"   ;;
+    alpine)                             PKG_MANAGER="apk"    ;;
     *)
       case "$OS_ID_LIKE" in
         *debian*|*ubuntu*) PKG_MANAGER="apt"    ;;
@@ -56,18 +61,17 @@ update() {
 
   case "$PKG_MANAGER" in
     apt)
-      sudo apt-get update -qq
+      "${SUDO[@]}" apt-get update -qq
       ;;
     dnf)
-      # dnf check-update exits 100 when updates are available — not a real error
-      sudo dnf check-update -q &>/dev/null || true
+      # exits 100 when updates are available — not a real error
+      "${SUDO[@]}" dnf check-update -q &>/dev/null || true
       ;;
     pacman)
-      sudo pacman -Sy --noconfirm &>/dev/null
+      "${SUDO[@]}" pacman -Sy --noconfirm &>/dev/null
       ;;
     apk)
-      if command -v sudo &>/dev/null; then sudo apk update -q
-      else apk update -q; fi
+      "${SUDO[@]}" apk update -q
       ;;
   esac
 
@@ -121,13 +125,10 @@ update() {
         echo ""
 
         case "$PKG_MANAGER" in
-          apt)    sudo apt-get upgrade -y ;;
-          dnf)    sudo dnf upgrade -y ;;
-          pacman) sudo pacman -Su --noconfirm ;;
-          apk)
-            if command -v sudo &>/dev/null; then sudo apk upgrade
-            else apk upgrade; fi
-            ;;
+          apt)    "${SUDO[@]}" apt-get upgrade -y ;;
+          dnf)    "${SUDO[@]}" dnf upgrade -y ;;
+          pacman) "${SUDO[@]}" pacman -Su --noconfirm ;;
+          apk)    "${SUDO[@]}" apk upgrade ;;
         esac
 
         echo ""
@@ -147,6 +148,7 @@ update() {
   # Informs only — never performs the upgrade.
 
   local upgrade_title="" upgrade_cmd="" upgrade_note=""
+  local sudo_prefix="${SUDO[*]:+${SUDO[*]} }"
 
   case "$PKG_MANAGER" in
 
@@ -161,7 +163,7 @@ update() {
             | head -1 \
             | sed 's/^[[:space:]]*//')
           [[ -z "$upgrade_title" ]] && upgrade_title="A new OS release is available."
-          upgrade_cmd="sudo do-release-upgrade"
+          upgrade_cmd="${sudo_prefix}do-release-upgrade"
         fi
       fi
       ;;
@@ -173,7 +175,7 @@ update() {
       if [[ "$current_ver" =~ ^[0-9]+$ ]]; then
         local next_ver=$(( current_ver + 1 ))
         upgrade_title="You are on Fedora ${current_ver}. Fedora ${next_ver} may be available."
-        upgrade_cmd="sudo dnf system-upgrade download --releasever=${next_ver} && sudo dnf system-upgrade reboot"
+        upgrade_cmd="${sudo_prefix}dnf system-upgrade download --releasever=${next_ver} && ${sudo_prefix}dnf system-upgrade reboot"
         upgrade_note="Run the command above to download the upgrade. Your system will reboot to apply it."
       fi
       ;;
