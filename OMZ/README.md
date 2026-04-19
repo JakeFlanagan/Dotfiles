@@ -103,4 +103,4 @@ cl    # alias for clear
 
 ## Adding Custom Scripts
 
-Drop any `.zsh` file into `OMZ/Home Folder/.oh-my-zsh/` and re-run `install.sh`. The installer dynamically symlinks everything it finds there — no hardcoded paths, no script edits required.
+Drop any file into `OMZ/Home Folder/` mirroring where it should live in `~` and re-run `install.sh`. It will be symlinked to the correct location automatically.
