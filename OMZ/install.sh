@@ -187,6 +187,7 @@ deploy_dotfiles() {
   # Walk every file in "Home Folder/" and symlink it to the same
   # relative path under ~  — the folder structure IS the home structure
   while IFS= read -r -d '' src; do
+    [[ "$(basename "$src")" == ".gitkeep" ]] && continue
     local rel="${src#"$HOME_FOLDER/"}"   # strip "Home Folder/" prefix
     local dst="$HOME/$rel"
 

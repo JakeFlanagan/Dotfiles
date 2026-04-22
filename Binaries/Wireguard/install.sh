@@ -1,4 +1,21 @@
 #!/usr/bin/env bash
+set -euo pipefail
+
+REPO_URL="https://github.com/JakeFlanagan/Scripts.git"
+REPO_DIR="/tmp/scripts-install"
+
+echo "Cloning repo..."
+git clone --depth=1 "$REPO_URL" "$REPO_DIR"
+
+echo "Installing wg-addclient.sh..."
+mkdir -p /usr/local/bin
+cp "$REPO_DIR/Home Folder/.bin/wg-addclient.sh" /usr/local/bin/wg-addclient.sh
+chmod +x /usr/local/bin/wg-addclient.sh
+
+echo "Cleaning up..."
+rm -rf "$REPO_DIR"
+
+echo "Done. wg-addclient.sh installed to /usr/local/bin/"#!/usr/bin/env bash
 # =============================================================================
 # JakeFlanagan/Scripts — One-shot installer
 # Usage:
