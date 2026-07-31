@@ -2,12 +2,6 @@
 
 > Personal dotfiles for cross-machine continuity. Configs, tooling, and shell preferences: everything needed to make any new box feel like home.
 
-<div align="center">
-
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-
-</div>
-
 ---
 
 ## Install
@@ -36,14 +30,10 @@ Sections are added as needed. Each lives in its own folder with its own installe
 
 ---
 
-## Licence
+## License
 
-JakeFlanagan/Dotfiles is licensed under the **GNU General Public License v3.0**.
+Copyright (C) 2026 Jake Flanagan
 
-| Permissions | Limitations | Conditions |
-|---|:---:|:---:|
-| ✅ Commercial use | ❌ Liability | 📋 License and copyright notice |
-| ✅ Modification | ❌ Warranty | ✏️ State changes |
-| ✅ Distribution | | 📂 Disclose source |
-| ✅ Patent use | | 🔄 Same license |
-| ✅ Private use | | |
+Licensed under the GNU General Public License v3.0 (GPLv3). See
+[`LICENSE`](LICENSE) for the full text. Anyone redistributing a modified
+version must release their modified source under the same license.
